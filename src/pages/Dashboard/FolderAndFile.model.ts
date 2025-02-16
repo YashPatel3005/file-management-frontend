@@ -47,3 +47,8 @@ export interface IFolderResponse {
     totalFiles: number;
   };
 }
+export interface IFilter {
+  name: string;
+  description: string;
+  date: string | null;
+}

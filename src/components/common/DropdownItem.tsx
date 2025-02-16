@@ -1,5 +1,4 @@
 import type React from "react";
-import { Link } from "react-router";
 
 interface DropdownItemProps {
   onClick?: () => void;

@@ -20,6 +20,7 @@ export interface ISavedScenario {
     data: IFolderResponse[];
     message: string;
   };
+  filterState: boolean;
 }
 
 const initialState: ISavedScenario = {
@@ -61,6 +62,7 @@ const initialState: ISavedScenario = {
     ],
     message: "",
   },
+  filterState: false,
 };
 export const getFolderAsync = createAsyncThunk("get/folder", async () => {
   try {
@@ -120,6 +122,9 @@ const FolderAndFileSlice = createSlice({
     UploadFileOpen: (state, action) => {
       state.uploadFileState = action.payload;
     },
+    FilterModalOpen: (state, action) => {
+      state.filterState = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -145,7 +150,6 @@ const FolderAndFileSlice = createSlice({
         state.uploadFileState = false;
         Toast({ message: action.payload.message, type: "success" });
       })
-
       .addCase(getFolderAsync.pending, (state) => {
         state.status = STATUS.PENDING;
       })

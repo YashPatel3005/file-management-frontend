@@ -8,11 +8,16 @@ import { FolderAndFileAction } from "./FolderAndFile.slice";
 
 export default function CreateFolderDropdown() {
   const dispatch = useAppDispatch();
-  const { CreateFolderModalOpen, UploadFileOpen } = FolderAndFileAction;
+  const { CreateFolderModalOpen, UploadFileOpen, FilterModalOpen } =
+    FolderAndFileAction;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
+  };
+
+  const handleFilterClick = () => {
+    dispatch(FilterModalOpen(true));
   };
 
   const closeDropdown = () => {
@@ -34,6 +39,7 @@ export default function CreateFolderDropdown() {
           alt="User Profile"
           width={40}
           className="cursor-pointer"
+          onClick={handleFilterClick}
         />
 
         <img

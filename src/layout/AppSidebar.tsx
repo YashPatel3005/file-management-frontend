@@ -24,7 +24,7 @@ const AppSidebar: React.FC = () => {
 
   const renderMenuItems = (folderData: any, level = 0) => (
     <ul className="flex flex-col">
-      {folderData.data.folders?.map(
+      {folderData?.data?.folders?.map(
         (folder: {
           _id: string;
           name: string;
@@ -74,16 +74,18 @@ const AppSidebar: React.FC = () => {
         )
       )}
 
-      {folderData.data.files?.map((file: { _id: string; fileName: string }) => (
-        <li key={file._id} className="flex flex-col">
-          <div className="flex items-center gap-2 px-4 py-2 border-b">
-            <img src="/images/file.png" alt="File" width={20} />
-            <span className="text-black font-inter font-normal text-[13px] leading-[15.73px] tracking-[0%]">
-              {file.fileName}
-            </span>
-          </div>
-        </li>
-      ))}
+      {folderData?.data?.files?.map(
+        (file: { _id: string; fileName: string }) => (
+          <li key={file._id} className="flex flex-col">
+            <div className="flex items-center gap-2 px-4 py-2 border-b">
+              <img src="/images/file.png" alt="File" width={20} />
+              <span className="text-black font-inter font-normal text-[13px] leading-[15.73px] tracking-[0%]">
+                {file.fileName}
+              </span>
+            </div>
+          </li>
+        )
+      )}
     </ul>
   );
 

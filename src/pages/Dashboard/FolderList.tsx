@@ -7,6 +7,7 @@ import { AppState, useAppDispatch, useAppSelector } from "../../store/store";
 import { FolderAndFileAction } from "./FolderAndFile.slice";
 import CreateFolder from "./CreateFolder";
 import UploadFile from "./UploadFile";
+import Filter from "./Filter";
 
 type FolderItem = {
   name: string;
@@ -54,10 +55,11 @@ export default function FolderList() {
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
   const dispatch = useAppDispatch();
-  const { createFolderState, uploadFileState } = useAppSelector(
+  const { createFolderState, uploadFileState, filterState } = useAppSelector(
     (state: AppState) => state.folders
   );
-  const { CreateFolderModalOpen, UploadFileOpen } = FolderAndFileAction;
+  const { CreateFolderModalOpen, UploadFileOpen, FilterModalOpen } =
+    FolderAndFileAction;
 
   const toggleFolder = (folderName: string) => {
     setOpenFolders((prev) => ({
@@ -87,24 +89,10 @@ export default function FolderList() {
               {item.type === "folder" ? (
                 <>
                   {(item.subItems?.length ?? 0) > 0 && (
-                    <img
-                      src="/images/folder-expand.png"
-                      alt="User"
-                      width={8}
-                      // className={`transition-transform ${
-                      //   openFolders[item.name] ? "rotate-180" : ""
-                      // }`}
-                    />
+                    <img src="/images/folder-expand.png" alt="User" width={8} />
                   )}
 
-                  <img
-                    src="/images/folder.png"
-                    alt="User"
-                    width={20}
-                    // className={`transition-transform ${
-                    //   openFolders[item.name] ? "rotate-180" : ""
-                    // }`}
-                  />
+                  <img src="/images/folder.png" alt="User" width={20} />
                   <span className="text-lg font-medium">{item.name}</span>
                   <span className="ml-2 text-xs bg-gray-200 px-2 py-1 rounded-lg">
                     {item.subItems?.length || 0}
@@ -154,21 +142,9 @@ export default function FolderList() {
   return (
     <>
       <div className="rounded-2xl  dark:bg-white/[0.03]">
-        {/* <table className="w-full border-collapse">
-        <thead>
-          <tr className=" dark:bg-gray-800">
-            <th className="px-4 py-3 text-left">Name</th>
-            <th className="px-4 py-3 text-left">Created At</th>
-            <th className="px-4 py-3 text-left">Updated At</th>
-            <th className="px-4 py-3 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody> */}
         <div className="px-5 py-5  shadow-default rounded-2xl dark:bg-gray-900">
           <div className="mt-4">{renderFolders(folderData)}</div>
         </div>
-        {/* </tbody>
-      </table> */}
       </div>
       {/* Create folder */}
       <Dialog
@@ -183,6 +159,12 @@ export default function FolderList() {
         onClose={() => dispatch(UploadFileOpen(false))}
         children={<UploadFile />}
         title="Upload Document"
+      />
+      <Dialog
+        isOpen={filterState}
+        onClose={() => dispatch(FilterModalOpen(false))}
+        children={<Filter />}
+        title="Filters"
       />
     </>
   );
