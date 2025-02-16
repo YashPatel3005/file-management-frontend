@@ -18,3 +18,9 @@ export interface ICreateFolder {
 export interface IUploadFile {
   file: File | null;
 }
+
+export interface IFilter {
+  name: string;
+  description: string;
+  date: string | null;
+}
