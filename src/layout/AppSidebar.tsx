@@ -1,78 +1,19 @@
-import React, { useEffect, useCallback, useRef, useState } from "react";
-import { Link, useLocation } from "react-router";
-
-// Assume these icons are imported from an icon library
-
+import React, { useEffect, useState } from "react";
 import NavigationBar from "./NavigationBar";
 import { useSidebar } from "../context/SidebarContext";
-import { useAppDispatch } from "../store/store";
+import { AppState, useAppDispatch, useAppSelector } from "../store/store";
 import { getFolderAsync } from "../pages/Dashboard/FolderAndFile.slice";
 
-type SidebarItem = {
-  name: string;
-  icon?: React.ReactNode;
-  path?: string;
-  subItems?: SidebarItem[];
-  type?: "folder" | "file";
-};
-
-const sidebarItems: SidebarItem[] = [
-  {
-    name: "Mission Logs",
-    type: "folder",
-    subItems: [],
-  },
-  {
-    name: "Cybersecurity Reports",
-    type: "folder",
-    subItems: [
-      {
-        name: "Operating Systems",
-        type: "folder",
-        subItems: [{ name: "note1.docx", type: "file" }],
-      },
-      {
-        name: "Networking Protocols",
-        type: "folder",
-        subItems: [],
-      },
-    ],
-  },
-  {
-    name: "Indian Navy",
-    type: "folder",
-    subItems: [],
-  },
-  {
-    name: "Astronomy",
-    type: "folder",
-    subItems: [],
-  },
-];
-
 const AppSidebar: React.FC = () => {
-  const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
-  const location = useLocation();
   const dispatch = useAppDispatch();
+  const { isExpanded, isMobileOpen } = useSidebar();
+  const { folderData } = useAppSelector((state: AppState) => state.folders);
+
   useEffect(() => {
     dispatch(getFolderAsync());
-  }, []);
-
-  const [openSubmenu, setOpenSubmenu] = useState<{
-    type: "main" | "others";
-    index: number;
-  } | null>(null);
-  const [subMenuHeight, setSubMenuHeight] = useState<Record<string, number>>(
-    {}
-  );
-  const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  }, [dispatch]);
 
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
-
-  const isActive = useCallback(
-    (path: string) => location.pathname === path,
-    [location.pathname]
-  );
 
   const toggleFolder = (folderName: string) => {
     setOpenFolders((prev) => ({
@@ -81,91 +22,72 @@ const AppSidebar: React.FC = () => {
     }));
   };
 
-  const renderMenuItems = (items: SidebarItem[], level = 0) => (
+  const renderMenuItems = (folderData: any, level = 0) => (
     <ul className="flex flex-col">
-      {items.map((item) => (
-        <li key={item.name} className="flex flex-col">
-          {item.type === "folder" ? (
+      {folderData?.data?.folders?.map(
+        (folder: {
+          _id: string;
+          name: string;
+          subItems?: any;
+          files?: { _id: string; fileName: string }[];
+        }) => (
+          <li key={folder._id} className="flex flex-col">
             <button
-              onClick={() => toggleFolder(item.name)}
+              onClick={() => toggleFolder(folder._id)}
               className="flex items-center gap-2 px-4 py-2 border-b cursor-pointer hover:bg-[rgba(169,181,223,0.3)] dark:hover:bg-gray-700"
             >
-              <img src="/images/folder.png" alt="User" width={20} />
+              <img src="/images/folder.png" alt="Folder" width={20} />
               {(isExpanded || isMobileOpen) && (
                 <span className="text-black font-inter font-normal text-[13px] leading-[15.73px] tracking-[0%]">
-                  {item.name}
+                  {folder.name}
                 </span>
               )}
-
               <img
                 src="/images/file-expand.png"
-                alt="User"
+                alt="Expand"
                 width={20}
                 className={`ml-auto w-5 h-5 transition-transform ${
-                  openFolders[item.name] ? "rotate-180" : ""
-                }
-                ${
-                  openFolders[item.name]
-                    ? "bg-yellow-300 rounded-xl color-white"
+                  openFolders[folder._id] ? "rotate-180" : ""
+                } ${
+                  openFolders[folder._id]
+                    ? "bg-yellow-300 rounded-xl text-white"
                     : ""
-                }
-                `}
+                }`}
               />
             </button>
-          ) : item.type === "file" ? (
+            {/* Render subfolders and files inside this folder */}
+            {openFolders[folder._id] && (
+              <div className="pl-6">
+                {folder.subItems &&
+                  renderMenuItems(
+                    {
+                      data: {
+                        folders: folder.subItems,
+                        files: folder?.files || [],
+                      },
+                    },
+                    level + 1
+                  )}
+              </div>
+            )}
+          </li>
+        )
+      )}
+
+      {folderData?.data?.files?.map(
+        (file: { _id: string; fileName: string }) => (
+          <li key={file._id} className="flex flex-col">
             <div className="flex items-center gap-2 px-4 py-2 border-b">
-              <img src="/images/file.png" alt="User" width={20} />
+              <img src="/images/file.png" alt="File" width={20} />
               <span className="text-black font-inter font-normal text-[13px] leading-[15.73px] tracking-[0%]">
-                {item.name}
+                {file.fileName}
               </span>
             </div>
-          ) : (
-            <Link
-              to={item.path || "#"}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-                isActive(item.path || "")
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`}
-            >
-              {item.icon}
-              {(isExpanded || isMobileOpen) && <span>{item.name}</span>}
-            </Link>
-          )}
-          {item.subItems && openFolders[item.name] && (
-            <div className="pl-6">
-              {renderMenuItems(item.subItems, level + 1)}
-            </div>
-          )}
-        </li>
-      ))}
+          </li>
+        )
+      )}
     </ul>
   );
-
-  useEffect(() => {
-    if (openSubmenu !== null) {
-      const key = `${openSubmenu.type}-${openSubmenu.index}`;
-      if (subMenuRefs.current[key]) {
-        setSubMenuHeight((prevHeights) => ({
-          ...prevHeights,
-          [key]: subMenuRefs.current[key]?.scrollHeight || 0,
-        }));
-      }
-    }
-  }, [openSubmenu]);
-
-  const handleSubmenuToggle = (index: number, menuType: "main" | "others") => {
-    setOpenSubmenu((prevOpenSubmenu) => {
-      if (
-        prevOpenSubmenu &&
-        prevOpenSubmenu.type === menuType &&
-        prevOpenSubmenu.index === index
-      ) {
-        return null;
-      }
-      return { type: menuType, index };
-    });
-  };
 
   return (
     <div className="flex">
@@ -224,7 +146,7 @@ const AppSidebar: React.FC = () => {
           <nav className="mb-6">
             <div className="flex flex-col gap-4">
               <div>
-                <nav>{renderMenuItems(sidebarItems)}</nav>
+                <nav>{renderMenuItems(folderData)}</nav>
               </div>
             </div>
           </nav>

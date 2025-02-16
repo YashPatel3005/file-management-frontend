@@ -5,10 +5,9 @@ import { ICreateFolder, IUploadFile } from "./FolderAndFile.model";
 export const getFolder = async () => {
   try {
     const res = await axiosInstance({
-      method: "get",
+      method: "GET",
       url: API_ROUTES.GET_FOLDER,
     });
-    console.log(res);
     return res.data;
   } catch (err) {
     throw err;
@@ -18,7 +17,7 @@ export const getFolder = async () => {
 export const createFolder = async (payload: ICreateFolder) => {
   try {
     const res = await axiosInstance({
-      method: "post",
+      method: "POST",
       url: API_ROUTES.CREATE_FOLDER,
       data: payload,
     });
@@ -36,7 +35,7 @@ export const uploadFile = async (payload: IUploadFile) => {
     }
 
     const res = await axiosInstance({
-      method: "post",
+      method: "POST",
       url: API_ROUTES.UPLOAD_FILE,
       data: formData,
     });
