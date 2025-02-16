@@ -6,18 +6,19 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import App from "./App";
-import { ThemeProvider } from "./context/ThemeContext";
 import { AppWrapper } from "./components/common/PageMeta";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <AppWrapper>
-      <ThemeProvider>
+    <Provider store={store}>
+      <AppWrapper>
         <App />
-      </ThemeProvider>
-    </AppWrapper>
+      </AppWrapper>
+    </Provider>
   </React.StrictMode>
 );

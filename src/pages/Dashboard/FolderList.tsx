@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { Dropdown } from "../../components/ui/dropdown/Dropdown";
-import { DropdownItem } from "../../components/ui/dropdown/DropdownItem";
+import { Dropdown } from "../../components/common/Dropdown";
+import { DropdownItem } from "../../components/common/DropdownItem";
+import Dialog from "../../components/common/Modal";
+import { DROPDOWN_ITEMS } from "../../utils/constants";
+import { AppState, useAppDispatch, useAppSelector } from "../../store/store";
+import { FolderAndFileAction } from "./FolderAndFile.slice";
+import CreateFolder from "./CreateFolder";
 
 type FolderItem = {
   name: string;
@@ -47,6 +52,9 @@ const folderData: FolderItem[] = [
 export default function FolderList() {
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
+  const { filterState } = useAppSelector((state: AppState) => state.folders);
+  const { FilterModalOpen } = FolderAndFileAction;
 
   const toggleFolder = (folderName: string) => {
     setOpenFolders((prev) => ({
@@ -114,18 +122,17 @@ export default function FolderList() {
                   onClose={closeDropdown}
                   className="w-44 p-2"
                 >
-                  <DropdownItem onItemClick={closeDropdown}>Edit</DropdownItem>
-                  <DropdownItem onItemClick={closeDropdown}>
-                    Delete
-                  </DropdownItem>
+                  {DROPDOWN_ITEMS.map((item, index) => (
+                    <DropdownItem key={index} onClick={() => {}}>
+                      {item.label}
+                    </DropdownItem>
+                  ))}
+
                   {item.type === "folder" && (
                     <DropdownItem onItemClick={closeDropdown}>
                       Create Folder
                     </DropdownItem>
                   )}
-                  <DropdownItem onItemClick={closeDropdown}>
-                    Upload Document
-                  </DropdownItem>
                 </Dropdown>
               )}
             </div>
@@ -142,8 +149,9 @@ export default function FolderList() {
   );
 
   return (
-    <div className="rounded-2xl  dark:bg-white/[0.03]">
-      <table className="w-full border-collapse">
+    <>
+      <div className="rounded-2xl  dark:bg-white/[0.03]">
+        {/* <table className="w-full border-collapse">
         <thead>
           <tr className=" dark:bg-gray-800">
             <th className="px-4 py-3 text-left">Name</th>
@@ -152,12 +160,18 @@ export default function FolderList() {
             <th className="px-4 py-3 text-left">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <div className="px-5 py-5  shadow-default rounded-2xl dark:bg-gray-900">
-            <div className="mt-4">{renderFolders(folderData)}</div>
-          </div>
-        </tbody>
-      </table>
-    </div>
+        <tbody> */}
+        <div className="px-5 py-5  shadow-default rounded-2xl dark:bg-gray-900">
+          <div className="mt-4">{renderFolders(folderData)}</div>
+        </div>
+        {/* </tbody>
+      </table> */}
+      </div>
+      <Dialog
+        isOpen={filterState}
+        onClose={() => dispatch(FilterModalOpen(false))}
+        children={<CreateFolder />}
+      />
+    </>
   );
 }

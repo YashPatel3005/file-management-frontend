@@ -81,17 +81,19 @@ const AppSidebar: React.FC = () => {
   };
 
   const renderMenuItems = (items: SidebarItem[], level = 0) => (
-    <ul className="flex flex-col gap-2">
+    <ul className="flex flex-col">
       {items.map((item) => (
         <li key={item.name} className="flex flex-col">
           {item.type === "folder" ? (
             <button
               onClick={() => toggleFolder(item.name)}
-              className="flex items-center gap-2 px-4 py-2 border-b rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+              className="flex items-center gap-2 px-4 py-2 border-b cursor-pointer hover:bg-[rgba(169,181,223,0.3)] dark:hover:bg-gray-700"
             >
               <img src="/images/folder.png" alt="User" width={20} />
               {(isExpanded || isHovered || isMobileOpen) && (
-                <span>{item.name}</span>
+                <span className="text-black font-inter font-normal text-[13px] leading-[15.73px] tracking-[0%]">
+                  {item.name}
+                </span>
               )}
 
               <img
@@ -112,7 +114,9 @@ const AppSidebar: React.FC = () => {
           ) : item.type === "file" ? (
             <div className="flex items-center gap-2 px-4 py-2 border-b">
               <img src="/images/file.png" alt="User" width={20} />
-              <span>{item.name}</span>
+              <span className="text-black font-inter font-normal text-[13px] leading-[15.73px] tracking-[0%]">
+                {item.name}
+              </span>
             </div>
           ) : (
             <Link
@@ -291,12 +295,12 @@ const AppSidebar: React.FC = () => {
     <div className="flex">
       <NavigationBar />
       <aside
-        className={`mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+        className={`mt-16 flex flex-col lg:mt-0 top-0 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
         ${
           isExpanded || isMobileOpen
-            ? "w-[290px]"
+            ? "w-[320px]"
             : isHovered
-            ? "w-[290px]"
+            ? "w-[320px]"
             : "w-[90px]"
         }
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
@@ -305,37 +309,38 @@ const AppSidebar: React.FC = () => {
         onMouseLeave={() => setIsHovered(false)}
       >
         <div
-          className={`py-8 flex ${
+          className={`pt-8 flex ${
             !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-          }`}
+          } flex flex-col`}
         >
-          <Link to="/">
-            {isExpanded || isHovered || isMobileOpen ? (
-              <>
-                <img
-                  className="dark:hidden"
-                  src="/images/logo/logo.svg"
-                  alt="Logo"
-                  width={150}
-                  height={40}
-                />
-                <img
-                  className="hidden dark:block"
-                  src="/images/logo/logo-dark.svg"
-                  alt="Logo"
-                  width={150}
-                  height={40}
-                />
-              </>
-            ) : (
+          <span className="font-inter text-black font-semibold text-[15px] leading-[18.15px] px-5">
+            Folders & Documents
+          </span>
+          <div className="flex flex-row mt-6 pb-5 items-start space-x-0 border-b border-[#DDDDDD] px-5">
+            <div className="flex flex-col w-[74px] h-[92px] gap-3">
+              <img src="images/folder.png" alt="" className="w-8 h-[27.79px]" />
+              <span className="font-inter font-normal text-[12px] leading-[14.52px] tracking-[0%]">
+                Folders
+              </span>
+              <span className="font-inter font-semibold text-[20px] leading-[24.2px] tracking-[0%]">
+                200+
+              </span>
+            </div>
+            <div className="border-l border-[#DDDDDD] h-[68px] pr-8"></div>
+            <div className="flex flex-col w-[74px] h-[92px] gap-[10px]">
               <img
-                src="/images/logo/logo-icon.svg"
-                alt="Logo"
-                width={32}
-                height={32}
+                src="images/document-file.png"
+                alt=""
+                className="w-[25px] h-[32px]"
               />
-            )}
-          </Link>
+              <span className="font-inter font-normal text-[12px] leading-[14.52px] tracking-[0%]">
+                Documents
+              </span>
+              <span className="font-inter font-semibold text-[20px] leading-[24.2px] tracking-[0%]">
+                200+
+              </span>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
           <nav className="mb-6">

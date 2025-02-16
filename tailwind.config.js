@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     fontFamily: {
       outfit: ["Outfit", "sans-serif"],
+      Inter: ["Inter", "sans-serif"],
     },
     screens: {
       "2xsm": "375px",
