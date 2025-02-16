@@ -2,6 +2,19 @@ import { axiosInstance } from "../../config/axios-interceptor";
 import { API_ROUTES } from "../../utils/constants";
 import { ICreateFolder, IUploadFile } from "./FolderAndFile.model";
 
+export const getFolder = async () => {
+  try {
+    const res = await axiosInstance({
+      method: "get",
+      url: API_ROUTES.GET_FOLDER,
+    });
+    console.log(res);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const createFolder = async (payload: ICreateFolder) => {
   try {
     const res = await axiosInstance({

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { ICreateFolder, IUploadFile, STATUS } from "./FolderAndFile.model";
-import { createFolder, uploadFile } from "./FolderAndFile.api";
+import { createFolder, getFolder, uploadFile } from "./FolderAndFile.api";
 import Toast from "../../components/common/Toast";
 import { AppState } from "../../store/store";
 import { IAxiosError, Utils } from "../../utils/utils";
@@ -17,6 +17,17 @@ const initialState: ISavedScenario = {
   createFolderState: false,
   uploadFileState: false,
 };
+export const getFolderAsync = createAsyncThunk("get/folder", async () => {
+  try {
+    const response = await getFolder();
+    return response;
+  } catch (err: unknown) {
+    const errorMessage = err as IAxiosError;
+    const errMsg = Utils.handleError(errorMessage.response.data.message);
+    Toast({ message: errMsg, type: "error" });
+    throw err;
+  }
+});
 
 export const createFolderAsync = createAsyncThunk(
   "add/folder",
@@ -86,6 +97,16 @@ const FolderAndFileSlice = createSlice({
         state.status = STATUS.FULFILLED;
         state.uploadFileState = false;
         Toast({ message: action.payload.message, type: "success" });
+      })
+
+      .addCase(getFolderAsync.pending, (state) => {
+        state.status = STATUS.PENDING;
+      })
+      .addCase(getFolderAsync.rejected, (state) => {
+        state.status = STATUS.REJECTED;
+      })
+      .addCase(getFolderAsync.fulfilled, (state, action) => {
+        state.status = STATUS.FULFILLED;
       });
   },
 });

@@ -5,6 +5,8 @@ import { Link, useLocation } from "react-router";
 
 import NavigationBar from "./NavigationBar";
 import { useSidebar } from "../context/SidebarContext";
+import { useAppDispatch } from "../store/store";
+import { getFolderAsync } from "../pages/Dashboard/FolderAndFile.slice";
 
 type SidebarItem = {
   name: string;
@@ -15,11 +17,6 @@ type SidebarItem = {
 };
 
 const sidebarItems: SidebarItem[] = [
-  // {
-  //   name: "Dashboard",
-  //   icon: <GridIcon />,
-  //   subItems: [{ name: "Ecommerce", path: "/" }],
-  // },
   {
     name: "Mission Logs",
     type: "folder",
@@ -56,6 +53,10 @@ const sidebarItems: SidebarItem[] = [
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getFolderAsync());
+  }, []);
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
