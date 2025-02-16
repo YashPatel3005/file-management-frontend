@@ -14,3 +14,7 @@ export interface ICreateFolder {
   name: string;
   description: string;
 }
+
+export interface IUploadFile {
+  file: File | null;
+}

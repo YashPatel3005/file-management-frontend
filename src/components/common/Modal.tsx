@@ -43,7 +43,6 @@ const Dialog: React.FC<DialogProps> = ({
             {title}
           </h2>
         )}
-
         <div className="text-black mt-4">{children}</div>
       </div>
     </div>

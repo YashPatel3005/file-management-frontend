@@ -8,7 +8,7 @@ import { FolderAndFileAction } from "./FolderAndFile.slice";
 
 export default function CreateFolderDropdown() {
   const dispatch = useAppDispatch();
-  const { FilterModalOpen } = FolderAndFileAction;
+  const { FilterModalOpen, UploadFileOpen } = FolderAndFileAction;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -22,6 +22,8 @@ export default function CreateFolderDropdown() {
   const handleItemClick = (name: string) => {
     if (name === "Create Folder") {
       dispatch(FilterModalOpen(true));
+    } else {
+      dispatch(UploadFileOpen(true));
     }
   };
   return (
