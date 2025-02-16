@@ -87,24 +87,10 @@ export default function FolderList() {
               {item.type === "folder" ? (
                 <>
                   {(item.subItems?.length ?? 0) > 0 && (
-                    <img
-                      src="/images/folder-expand.png"
-                      alt="User"
-                      width={8}
-                      // className={`transition-transform ${
-                      //   openFolders[item.name] ? "rotate-180" : ""
-                      // }`}
-                    />
+                    <img src="/images/folder-expand.png" alt="User" width={8} />
                   )}
 
-                  <img
-                    src="/images/folder.png"
-                    alt="User"
-                    width={20}
-                    // className={`transition-transform ${
-                    //   openFolders[item.name] ? "rotate-180" : ""
-                    // }`}
-                  />
+                  <img src="/images/folder.png" alt="User" width={20} />
                   <span className="text-lg font-medium">{item.name}</span>
                   <span className="ml-2 text-xs bg-gray-200 px-2 py-1 rounded-lg">
                     {item.subItems?.length || 0}
@@ -154,21 +140,9 @@ export default function FolderList() {
   return (
     <>
       <div className="rounded-2xl  dark:bg-white/[0.03]">
-        {/* <table className="w-full border-collapse">
-        <thead>
-          <tr className=" dark:bg-gray-800">
-            <th className="px-4 py-3 text-left">Name</th>
-            <th className="px-4 py-3 text-left">Created At</th>
-            <th className="px-4 py-3 text-left">Updated At</th>
-            <th className="px-4 py-3 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody> */}
         <div className="px-5 py-5  shadow-default rounded-2xl dark:bg-gray-900">
           <div className="mt-4">{renderFolders(folderData)}</div>
         </div>
-        {/* </tbody>
-      </table> */}
       </div>
       {/* Create folder */}
       <Dialog

@@ -33,8 +33,10 @@ const CreateFolder = () => {
       name: values.name,
     };
 
-    dispatch(createFolderAsync(payload));
-    resetForm();
+    const res = dispatch(createFolderAsync(payload));
+    if ((await res).payload.success) {
+      resetForm();
+    }
   };
   return (
     <>

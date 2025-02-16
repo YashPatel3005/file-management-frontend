@@ -12,6 +12,7 @@ export const DROPDOWN_ITEMS = [
 export const API_ROUTES = {
   CREATE_FOLDER: "/folder/create",
   UPLOAD_FILE: "/file/upload",
+  GET_FOLDER: "/folder/list",
 };
 
 export const STATUS = {

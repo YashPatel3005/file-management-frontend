@@ -5,6 +5,8 @@ import { Link, useLocation } from "react-router";
 
 import NavigationBar from "./NavigationBar";
 import { useSidebar } from "../context/SidebarContext";
+import { useAppDispatch } from "../store/store";
+import { getFolderAsync } from "../pages/Dashboard/FolderAndFile.slice";
 
 type SidebarItem = {
   name: string;
@@ -15,11 +17,6 @@ type SidebarItem = {
 };
 
 const sidebarItems: SidebarItem[] = [
-  // {
-  //   name: "Dashboard",
-  //   icon: <GridIcon />,
-  //   subItems: [{ name: "Ecommerce", path: "/" }],
-  // },
   {
     name: "Mission Logs",
     type: "folder",
@@ -56,6 +53,10 @@ const sidebarItems: SidebarItem[] = [
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getFolderAsync());
+  }, []);
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
@@ -166,129 +167,6 @@ const AppSidebar: React.FC = () => {
     });
   };
 
-  // const renderMenuItems = (items: NavItem[], menuType: "main" | "others") => (
-  //   <ul className="flex flex-col gap-4">
-  //     {items.map((nav, index) => (
-  //       <li key={nav.name}>
-  //         {nav.subItems ? (
-  //           <button
-  //             onClick={() => handleSubmenuToggle(index, menuType)}
-  //             className={`menu-item group ${
-  //               openSubmenu?.type === menuType && openSubmenu?.index === index
-  //                 ? "menu-item-active"
-  //                 : "menu-item-inactive"
-  //             } cursor-pointer ${
-  //               !isExpanded && !isHovered
-  //                 ? "lg:justify-center"
-  //                 : "lg:justify-start"
-  //             }`}
-  //           >
-  //             <span
-  //               className={`${
-  //                 openSubmenu?.type === menuType && openSubmenu?.index === index
-  //                   ? "menu-item-icon-active"
-  //                   : "menu-item-icon-inactive"
-  //               }`}
-  //             >
-  //               {nav.icon}
-  //             </span>
-  //             {(isExpanded || isHovered || isMobileOpen) && (
-  //               <span className="menu-item-text">{nav.name}</span>
-  //             )}
-  //             {(isExpanded || isHovered || isMobileOpen) && (
-  //               <ChevronDownIcon
-  //                 className={`ml-auto w-5 h-5 transition-transform duration-200 ${
-  //                   openSubmenu?.type === menuType &&
-  //                   openSubmenu?.index === index
-  //                     ? "rotate-180 text-brand-500"
-  //                     : ""
-  //                 }`}
-  //               />
-  //             )}
-  //           </button>
-  //         ) : (
-  //           nav.path && (
-  //             <Link
-  //               to={nav.path}
-  //               className={`menu-item group ${
-  //                 isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
-  //               }`}
-  //             >
-  //               <span
-  //                 className={`${
-  //                   isActive(nav.path)
-  //                     ? "menu-item-icon-active"
-  //                     : "menu-item-icon-inactive"
-  //                 }`}
-  //               >
-  //                 {nav.icon}
-  //               </span>
-  //               {(isExpanded || isHovered || isMobileOpen) && (
-  //                 <span className="menu-item-text">{nav.name}</span>
-  //               )}
-  //             </Link>
-  //           )
-  //         )}
-  //         {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
-  //           <div
-  //             ref={(el) => {
-  //               subMenuRefs.current[`${menuType}-${index}`] = el;
-  //             }}
-  //             className="overflow-hidden transition-all duration-300"
-  //             style={{
-  //               height:
-  //                 openSubmenu?.type === menuType && openSubmenu?.index === index
-  //                   ? `${subMenuHeight[`${menuType}-${index}`]}px`
-  //                   : "0px",
-  //             }}
-  //           >
-  //             <ul className="mt-2 space-y-1 ml-9">
-  //               {nav.subItems.map((subItem) => (
-  //                 <li key={subItem.name}>
-  //                   <Link
-  //                     to={subItem.path}
-  //                     className={`menu-dropdown-item ${
-  //                       isActive(subItem.path)
-  //                         ? "menu-dropdown-item-active"
-  //                         : "menu-dropdown-item-inactive"
-  //                     }`}
-  //                   >
-  //                     {subItem.name}
-  //                     <span className="flex items-center gap-1 ml-auto">
-  //                       {subItem.new && (
-  //                         <span
-  //                           className={`ml-auto ${
-  //                             isActive(subItem.path)
-  //                               ? "menu-dropdown-badge-active"
-  //                               : "menu-dropdown-badge-inactive"
-  //                           } menu-dropdown-badge`}
-  //                         >
-  //                           new
-  //                         </span>
-  //                       )}
-  //                       {subItem.pro && (
-  //                         <span
-  //                           className={`ml-auto ${
-  //                             isActive(subItem.path)
-  //                               ? "menu-dropdown-badge-active"
-  //                               : "menu-dropdown-badge-inactive"
-  //                           } menu-dropdown-badge`}
-  //                         >
-  //                           pro
-  //                         </span>
-  //                       )}
-  //                     </span>
-  //                   </Link>
-  //                 </li>
-  //               ))}
-  //             </ul>
-  //           </div>
-  //         )}
-  //       </li>
-  //     ))}
-  //   </ul>
-  // );
-
   return (
     <div className="flex">
       <NavigationBar />
@@ -297,8 +175,6 @@ const AppSidebar: React.FC = () => {
         ${isExpanded || isMobileOpen ? "w-[320px]" : "w-[90px]"}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
-        // onMouseEnter={() => !isExpanded && setIsHovered(true)}
-        // onMouseLeave={() => setIsHovered(false)}
       >
         <div
           className={`pt-8 flex ${
@@ -348,7 +224,6 @@ const AppSidebar: React.FC = () => {
           <nav className="mb-6">
             <div className="flex flex-col gap-4">
               <div>
-                {/* {renderMenuItems(navItems, "main")} */}
                 <nav>{renderMenuItems(sidebarItems)}</nav>
               </div>
             </div>
