@@ -9,7 +9,7 @@ import { createFolderAsync, FolderAndFileAction } from "./FolderAndFile.slice";
 import { AppState, useAppDispatch } from "../../store/store";
 
 const CreateFolder = () => {
-  const { FilterModalOpen } = FolderAndFileAction;
+  const { CreateFolderModalOpen } = FolderAndFileAction;
   const dispatch = useAppDispatch();
   const initialValues: ICreateFolder = {
     description: "",
@@ -28,6 +28,8 @@ const CreateFolder = () => {
       description: values.description,
       name: values.name,
     };
+
+    console.log(payload);
 
     dispatch(createFolderAsync(payload));
     resetForm();
@@ -112,7 +114,7 @@ const CreateFolder = () => {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => dispatch(FilterModalOpen(false))}
+                    onClick={() => dispatch(CreateFolderModalOpen(false))}
                     className="font-Inter text-[15px] font-[500] leading-[18.15px]"
                   >
                     Close

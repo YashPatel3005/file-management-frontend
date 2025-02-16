@@ -5,8 +5,9 @@ import { ICreateFolder } from "./FolderAndFile.model";
 export const createFolder = async (payload: ICreateFolder) => {
   try {
     const res = await axiosInstance({
-      method: "get",
+      method: "post",
       url: API_ROUTES.CREATE_FOLDER,
+      data: payload,
     });
     return res.data;
   } catch (err) {

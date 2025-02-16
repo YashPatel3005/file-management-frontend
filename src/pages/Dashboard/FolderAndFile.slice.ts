@@ -41,7 +41,7 @@ const FolderAndFileSlice = createSlice({
       return state;
     },
 
-    FilterModalOpen: (state, action) => {
+    CreateFolderModalOpen: (state, action) => {
       state.filterState = action.payload;
     },
     UploadFileOpen: (state, action) => {

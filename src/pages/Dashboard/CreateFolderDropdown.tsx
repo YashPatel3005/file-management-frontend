@@ -8,7 +8,7 @@ import { FolderAndFileAction } from "./FolderAndFile.slice";
 
 export default function CreateFolderDropdown() {
   const dispatch = useAppDispatch();
-  const { FilterModalOpen, UploadFileOpen } = FolderAndFileAction;
+  const { CreateFolderModalOpen, UploadFileOpen } = FolderAndFileAction;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -21,7 +21,7 @@ export default function CreateFolderDropdown() {
 
   const handleItemClick = (name: string) => {
     if (name === "Create Folder") {
-      dispatch(FilterModalOpen(true));
+      dispatch(CreateFolderModalOpen(true));
     } else {
       dispatch(UploadFileOpen(true));
     }
@@ -49,15 +49,15 @@ export default function CreateFolderDropdown() {
         <Dropdown
           isOpen={isOpen}
           onClose={closeDropdown}
-          className="absolute right-0 mt-[17px] flex w-[180px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
+          className="absolute p-1 right-0 mt-[8px] flex w-[170px] flex-col border border-gray-200 bg-white shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
         >
-          <ul className="flex flex-col gap-1 pt-4 pb-3 border-gray-200 dark:border-gray-800">
+          <ul className="flex flex-col divide-y divide-gray-200 dark:divide-gray-800">
             {CREATE_FILE_ARRAY.map((item, index) => (
-              <li key={index}>
+              <li key={index} className="flex flex-col">
                 <DropdownItem
                   onClick={() => handleItemClick(item.label)}
                   onItemClick={closeDropdown}
-                  className="flex items-center gap-3  font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 border-b"
+                  className="flex items-center font-medium text-gray-700 group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                 >
                   {item.label}
                 </DropdownItem>

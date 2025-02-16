@@ -57,7 +57,7 @@ export default function FolderList() {
   const { filterState, uploadFileState } = useAppSelector(
     (state: AppState) => state.folders
   );
-  const { FilterModalOpen, UploadFileOpen } = FolderAndFileAction;
+  const { CreateFolderModalOpen, UploadFileOpen } = FolderAndFileAction;
 
   const toggleFolder = (folderName: string) => {
     setOpenFolders((prev) => ({
@@ -173,7 +173,7 @@ export default function FolderList() {
       {/* Create folder */}
       <Dialog
         isOpen={filterState}
-        onClose={() => dispatch(FilterModalOpen(false))}
+        onClose={() => dispatch(CreateFolderModalOpen(false))}
         children={<CreateFolder />}
         title="Create Folder"
       />
