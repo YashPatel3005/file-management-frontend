@@ -20,7 +20,7 @@ const CreateFolder = () => {
     description: Yup.string().required(VALIDATION_MESSAGES.required),
   });
 
-  const handelLogin = async (
+  const handleCreateFolder = async (
     values: ICreateFolder,
     { resetForm }: FormikHelpers<ICreateFolder>
   ) => {
@@ -37,7 +37,7 @@ const CreateFolder = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchemaLogin}
-        onSubmit={handelLogin}
+        onSubmit={handleCreateFolder}
         enableReinitialize
       >
         {({
@@ -55,11 +55,6 @@ const CreateFolder = () => {
               className="flex flex-col self-stretch my-auto w-full bg-white font-medium max-md:mt-10"
             >
               <div className="no-scrollbar relative   overflow-y-auto  bg-white dark:bg-gray-900">
-                <div className="px-2 pr-14">
-                  <h4 className="mb-2 text-[18px] leading-[18.15px] font-Inter font-[600] text-gray-800 dark:text-white/90">
-                    Create Folder
-                  </h4>
-                </div>
                 <div className="custom-scrollbar h-auto overflow-y-auto px-2 pb-3 mt-5">
                   <div>
                     <div className="mb-5">

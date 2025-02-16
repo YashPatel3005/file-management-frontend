@@ -6,6 +6,7 @@ import { DROPDOWN_ITEMS } from "../../utils/constants";
 import { AppState, useAppDispatch, useAppSelector } from "../../store/store";
 import { FolderAndFileAction } from "./FolderAndFile.slice";
 import CreateFolder from "./CreateFolder";
+import UploadFile from "./UploadFile";
 
 type FolderItem = {
   name: string;
@@ -53,8 +54,10 @@ export default function FolderList() {
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
   const dispatch = useAppDispatch();
-  const { filterState } = useAppSelector((state: AppState) => state.folders);
-  const { FilterModalOpen } = FolderAndFileAction;
+  const { filterState, uploadFileState } = useAppSelector(
+    (state: AppState) => state.folders
+  );
+  const { FilterModalOpen, UploadFileOpen } = FolderAndFileAction;
 
   const toggleFolder = (folderName: string) => {
     setOpenFolders((prev) => ({
@@ -167,10 +170,19 @@ export default function FolderList() {
         {/* </tbody>
       </table> */}
       </div>
+      {/* Create folder */}
       <Dialog
         isOpen={filterState}
         onClose={() => dispatch(FilterModalOpen(false))}
         children={<CreateFolder />}
+        title="Create Folder"
+      />
+      {/* Upload file */}
+      <Dialog
+        isOpen={uploadFileState}
+        onClose={() => dispatch(UploadFileOpen(false))}
+        children={<UploadFile />}
+        title="Upload Document"
       />
     </>
   );

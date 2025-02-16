@@ -8,14 +8,14 @@ import { IAxiosError, Utils } from "../../utils/utils";
 
 export interface ISavedScenario {
   status: STATUS;
-
   filterState: boolean;
+  uploadFileState: boolean;
 }
 
 const initialState: ISavedScenario = {
   status: STATUS.IDEL,
-
   filterState: false,
+  uploadFileState: false,
 };
 
 export const createFolderAsync = createAsyncThunk(
@@ -43,6 +43,9 @@ const FolderAndFileSlice = createSlice({
 
     FilterModalOpen: (state, action) => {
       state.filterState = action.payload;
+    },
+    UploadFileOpen: (state, action) => {
+      state.uploadFileState = action.payload;
     },
   },
   extraReducers: (builder) => {
