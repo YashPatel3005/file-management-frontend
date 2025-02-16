@@ -71,6 +71,8 @@ const CreateFolder = () => {
                       <Input
                         type="text"
                         name="name"
+                        placeholder="Folder name"
+                        className="font-Inter text-[15px] font-[500] leading-[18.15px]"
                         value={values.name ?? ""}
                         onChange={(e) => {
                           const { value } = e.target;
@@ -96,6 +98,8 @@ const CreateFolder = () => {
                       <Input
                         type="text"
                         name="description"
+                        placeholder="Folder description"
+                        className="font-Inter text-[15px] font-[500] leading-[18.15px]"
                         value={values.description ?? ""}
                         onChange={(e) => {
                           const { value } = e.target;

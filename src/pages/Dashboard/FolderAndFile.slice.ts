@@ -10,12 +10,14 @@ export interface ISavedScenario {
   status: STATUS;
   createFolderState: boolean;
   uploadFileState: boolean;
+  filterState: boolean;
 }
 
 const initialState: ISavedScenario = {
   status: STATUS.IDEL,
   createFolderState: false,
   uploadFileState: false,
+  filterState: false,
 };
 export const getFolderAsync = createAsyncThunk("get/folder", async () => {
   try {
@@ -72,6 +74,9 @@ const FolderAndFileSlice = createSlice({
     },
     UploadFileOpen: (state, action) => {
       state.uploadFileState = action.payload;
+    },
+    FilterModalOpen: (state, action) => {
+      state.filterState = action.payload;
     },
   },
   extraReducers: (builder) => {
