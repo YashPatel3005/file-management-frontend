@@ -9,6 +9,7 @@ import App from "./App";
 import { AppWrapper } from "./components/common/PageMeta";
 import { Provider } from "react-redux";
 import store from "./store/store";
+import { ToastContainer } from "react-toastify";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,6 +17,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
+      <ToastContainer />
       <AppWrapper>
         <App />
       </AppWrapper>

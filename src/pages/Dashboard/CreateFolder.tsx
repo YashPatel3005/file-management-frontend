@@ -7,10 +7,14 @@ import { ICreateFolder } from "./FolderAndFile.model";
 import { VALIDATION_MESSAGES } from "../../utils/validation";
 import { createFolderAsync, FolderAndFileAction } from "./FolderAndFile.slice";
 import { AppState, useAppDispatch } from "../../store/store";
+import { useSelector } from "react-redux";
+import { STATUS } from "../../utils/constants";
+import Loader from "../../components/Loader";
 
 const CreateFolder = () => {
-  const { FilterModalOpen } = FolderAndFileAction;
+  const { CreateFolderModalOpen } = FolderAndFileAction;
   const dispatch = useAppDispatch();
+  const { status } = useSelector((state: AppState) => state.folders);
   const initialValues: ICreateFolder = {
     description: "",
     name: "",
@@ -34,6 +38,7 @@ const CreateFolder = () => {
   };
   return (
     <>
+      {status === STATUS.PENDING && <Loader />}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchemaLogin}
@@ -112,7 +117,7 @@ const CreateFolder = () => {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => dispatch(FilterModalOpen(false))}
+                    onClick={() => dispatch(CreateFolderModalOpen(false))}
                     className="font-Inter text-[15px] font-[500] leading-[18.15px]"
                   >
                     Close
@@ -121,6 +126,7 @@ const CreateFolder = () => {
                     size="sm"
                     type="submit"
                     className="font-Inter text-[15px] font-[500] leading-[18.15px]"
+                    disabled={status === STATUS.PENDING}
                   >
                     Create Folder
                   </Button>

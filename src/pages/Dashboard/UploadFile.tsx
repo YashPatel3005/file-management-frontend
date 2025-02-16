@@ -2,16 +2,20 @@ import React, { useState } from "react";
 import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import Button from "../../components/common/Button";
-import { useAppDispatch } from "../../store/store";
-import { FolderAndFileAction } from "./FolderAndFile.slice";
+import { AppState, useAppDispatch } from "../../store/store";
+import { FolderAndFileAction, uploadFileAsync } from "./FolderAndFile.slice";
 import { IUploadFile } from "./FolderAndFile.model";
 import Loader from "../../components/Loader";
+import { useSelector } from "react-redux";
+import { STATUS } from "../../utils/constants";
 
 const UploadFile = () => {
   const dispatch = useAppDispatch();
   const { UploadFileOpen } = FolderAndFileAction;
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const { status } = useSelector((state: AppState) => state.folders);
 
   const initialValues: IUploadFile = {
     file: null,
@@ -47,9 +51,6 @@ const UploadFile = () => {
     setIsUploading(true);
     setUploadProgress(0);
 
-    const formData = new FormData();
-    formData.append("file", values.file);
-
     try {
       await new Promise((resolve) => {
         let progress = 0;
@@ -63,7 +64,11 @@ const UploadFile = () => {
         }, 100);
       });
 
-      console.log("sucess");
+      const payload: IUploadFile = {
+        file: values.file,
+      };
+
+      await dispatch(uploadFileAsync(payload));
     } catch (error) {
     } finally {
       setIsUploading(false);

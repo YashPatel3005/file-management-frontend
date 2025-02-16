@@ -90,7 +90,7 @@ const AppSidebar: React.FC = () => {
               className="flex items-center gap-2 px-4 py-2 border-b cursor-pointer hover:bg-[rgba(169,181,223,0.3)] dark:hover:bg-gray-700"
             >
               <img src="/images/folder.png" alt="User" width={20} />
-              {(isExpanded || isHovered || isMobileOpen) && (
+              {(isExpanded || isMobileOpen) && (
                 <span className="text-black font-inter font-normal text-[13px] leading-[15.73px] tracking-[0%]">
                   {item.name}
                 </span>
@@ -128,9 +128,7 @@ const AppSidebar: React.FC = () => {
               }`}
             >
               {item.icon}
-              {(isExpanded || isHovered || isMobileOpen) && (
-                <span>{item.name}</span>
-              )}
+              {(isExpanded || isMobileOpen) && <span>{item.name}</span>}
             </Link>
           )}
           {item.subItems && openFolders[item.name] && (
@@ -296,51 +294,55 @@ const AppSidebar: React.FC = () => {
       <NavigationBar />
       <aside
         className={`mt-16 flex flex-col lg:mt-0 top-0 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
-        ${
-          isExpanded || isMobileOpen
-            ? "w-[320px]"
-            : isHovered
-            ? "w-[320px]"
-            : "w-[90px]"
-        }
+        ${isExpanded || isMobileOpen ? "w-[320px]" : "w-[90px]"}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
-        onMouseEnter={() => !isExpanded && setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        // onMouseEnter={() => !isExpanded && setIsHovered(true)}
+        // onMouseLeave={() => setIsHovered(false)}
       >
         <div
           className={`pt-8 flex ${
-            !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
+            !isExpanded ? "lg:justify-center" : "justify-start"
           } flex flex-col`}
         >
-          <span className="font-inter text-black font-semibold text-[15px] leading-[18.15px] px-5">
-            Folders & Documents
-          </span>
-          <div className="flex flex-row mt-6 pb-5 items-start space-x-0 border-b border-[#DDDDDD] px-5">
-            <div className="flex flex-col w-[74px] h-[92px] gap-3">
-              <img src="images/folder.png" alt="" className="w-8 h-[27.79px]" />
-              <span className="font-inter font-normal text-[12px] leading-[14.52px] tracking-[0%]">
-                Folders
+          {isExpanded ? (
+            <>
+              <span className="font-inter text-black font-semibold text-[15px] leading-[18.15px] px-5">
+                Folders & Documents
               </span>
-              <span className="font-inter font-semibold text-[20px] leading-[24.2px] tracking-[0%]">
-                200+
-              </span>
-            </div>
-            <div className="border-l border-[#DDDDDD] h-[68px] pr-8"></div>
-            <div className="flex flex-col w-[74px] h-[92px] gap-[10px]">
-              <img
-                src="images/document-file.png"
-                alt=""
-                className="w-[25px] h-[32px]"
-              />
-              <span className="font-inter font-normal text-[12px] leading-[14.52px] tracking-[0%]">
-                Documents
-              </span>
-              <span className="font-inter font-semibold text-[20px] leading-[24.2px] tracking-[0%]">
-                200+
-              </span>
-            </div>
-          </div>
+              <div className="flex flex-row mt-6 pb-5 items-start space-x-0 border-b border-[#DDDDDD] px-5">
+                <div className="flex flex-col w-[74px] h-[92px] gap-3">
+                  <img
+                    src="images/folder.png"
+                    alt=""
+                    className="w-8 h-[27.79px]"
+                  />
+                  <span className="font-inter font-normal text-[12px] leading-[14.52px] tracking-[0%]">
+                    Folders
+                  </span>
+                  <span className="font-inter font-semibold text-[20px] leading-[24.2px] tracking-[0%]">
+                    200+
+                  </span>
+                </div>
+                <div className="border-l border-[#DDDDDD] h-[68px] pr-8"></div>
+                <div className="flex flex-col w-[74px] h-[92px] gap-[10px]">
+                  <img
+                    src="images/document-file.png"
+                    alt=""
+                    className="w-[25px] h-[32px]"
+                  />
+                  <span className="font-inter font-normal text-[12px] leading-[14.52px] tracking-[0%]">
+                    Documents
+                  </span>
+                  <span className="font-inter font-semibold text-[20px] leading-[24.2px] tracking-[0%]">
+                    200+
+                  </span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div></div>
+          )}
         </div>
         <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
           <nav className="mb-6">
