@@ -98,7 +98,6 @@ const FolderAndFileSlice = createSlice({
         state.uploadFileState = false;
         Toast({ message: action.payload.message, type: "success" });
       })
-
       .addCase(getFolderAsync.pending, (state) => {
         state.status = STATUS.PENDING;
       })

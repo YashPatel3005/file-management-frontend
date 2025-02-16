@@ -5,17 +5,13 @@ import Button from "../../components/common/Button";
 import { AppState, useAppDispatch } from "../../store/store";
 import { FolderAndFileAction, uploadFileAsync } from "./FolderAndFile.slice";
 import { IUploadFile } from "./FolderAndFile.model";
-import Loader from "../../components/Loader";
 import { useSelector } from "react-redux";
-import { STATUS } from "../../utils/constants";
 
 const UploadFile = () => {
   const dispatch = useAppDispatch();
   const { UploadFileOpen } = FolderAndFileAction;
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
-
-  const { status } = useSelector((state: AppState) => state.folders);
 
   const initialValues: IUploadFile = {
     file: null,
