@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { ICreateFolder, IUploadFile, STATUS } from "./FolderAndFile.model";
+import {
+  ICreateFolder,
+  IFolderResponse,
+  IUploadFile,
+  STATUS,
+} from "./FolderAndFile.model";
 import { createFolder, getFolder, uploadFile } from "./FolderAndFile.api";
 import Toast from "../../components/common/Toast";
 import { AppState } from "../../store/store";
@@ -10,12 +15,52 @@ export interface ISavedScenario {
   status: STATUS;
   createFolderState: boolean;
   uploadFileState: boolean;
+  folderData: {
+    success: boolean;
+    data: IFolderResponse[];
+    message: string;
+  };
 }
 
 const initialState: ISavedScenario = {
   status: STATUS.IDEL,
   createFolderState: false,
   uploadFileState: false,
+  folderData: {
+    success: false,
+    data: [
+      {
+        files: [
+          {
+            __v: 0,
+            _id: "",
+            createdAt: 0,
+            fileName: "",
+            mimeType: "",
+            path: "",
+            updatedAt: 0,
+          },
+        ],
+        folders: [
+          {
+            _id: "",
+            name: "",
+            description: "",
+            path: "",
+            createdAt: 0,
+            updatedAt: 0,
+            __v: 0,
+          },
+        ],
+
+        statistics: {
+          totalFolders: 0,
+          totalFiles: 0,
+        },
+      },
+    ],
+    message: "",
+  },
 };
 export const getFolderAsync = createAsyncThunk("get/folder", async () => {
   try {
@@ -31,9 +76,10 @@ export const getFolderAsync = createAsyncThunk("get/folder", async () => {
 
 export const createFolderAsync = createAsyncThunk(
   "add/folder",
-  async (payload: ICreateFolder) => {
+  async (payload: ICreateFolder, { dispatch }) => {
     try {
       const response = await createFolder(payload);
+      dispatch(getFolderAsync());
       return response;
     } catch (err: unknown) {
       const errorMessage = err as IAxiosError;
@@ -46,9 +92,10 @@ export const createFolderAsync = createAsyncThunk(
 
 export const uploadFileAsync = createAsyncThunk(
   "upload/file",
-  async (payload: IUploadFile) => {
+  async (payload: IUploadFile, { dispatch }) => {
     try {
       const response = await uploadFile(payload);
+      dispatch(getFolderAsync());
       return response;
     } catch (err: unknown) {
       const errorMessage = err as IAxiosError;
@@ -107,6 +154,7 @@ const FolderAndFileSlice = createSlice({
       })
       .addCase(getFolderAsync.fulfilled, (state, action) => {
         state.status = STATUS.FULFILLED;
+        state.folderData.data = action.payload.data;
       });
   },
 });
