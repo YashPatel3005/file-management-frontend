@@ -11,4 +11,12 @@ export const DROPDOWN_ITEMS = [
 
 export const API_ROUTES = {
   CREATE_FOLDER: "/folder/create",
+  UPLOAD_FILE: "/file/upload",
+};
+
+export const STATUS = {
+  PENDING: "pending",
+  FULLFIELD: "fulfilled",
+  REJECTED: "rejected",
+  IDLE: "idle",
 };

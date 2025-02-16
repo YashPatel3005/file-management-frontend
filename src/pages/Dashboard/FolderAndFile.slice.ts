@@ -1,20 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { ICreateFolder, STATUS } from "./FolderAndFile.model";
-import { createFolder } from "./FolderAndFile.api";
+import { ICreateFolder, IUploadFile, STATUS } from "./FolderAndFile.model";
+import { createFolder, uploadFile } from "./FolderAndFile.api";
 import Toast from "../../components/common/Toast";
 import { AppState } from "../../store/store";
 import { IAxiosError, Utils } from "../../utils/utils";
 
 export interface ISavedScenario {
   status: STATUS;
-  filterState: boolean;
+  createFolderState: boolean;
   uploadFileState: boolean;
 }
 
 const initialState: ISavedScenario = {
   status: STATUS.IDEL,
-  filterState: false,
+  createFolderState: false,
   uploadFileState: false,
 };
 
@@ -23,6 +23,21 @@ export const createFolderAsync = createAsyncThunk(
   async (payload: ICreateFolder) => {
     try {
       const response = await createFolder(payload);
+      return response;
+    } catch (err: unknown) {
+      const errorMessage = err as IAxiosError;
+      const errMsg = Utils.handleError(errorMessage.response.data.message);
+      Toast({ message: errMsg, type: "error" });
+      throw err;
+    }
+  }
+);
+
+export const uploadFileAsync = createAsyncThunk(
+  "upload/file",
+  async (payload: IUploadFile) => {
+    try {
+      const response = await uploadFile(payload);
       return response;
     } catch (err: unknown) {
       const errorMessage = err as IAxiosError;
@@ -42,7 +57,7 @@ const FolderAndFileSlice = createSlice({
     },
 
     CreateFolderModalOpen: (state, action) => {
-      state.filterState = action.payload;
+      state.createFolderState = action.payload;
     },
     UploadFileOpen: (state, action) => {
       state.uploadFileState = action.payload;
@@ -58,6 +73,18 @@ const FolderAndFileSlice = createSlice({
       })
       .addCase(createFolderAsync.fulfilled, (state, action) => {
         state.status = STATUS.FULFILLED;
+        state.createFolderState = false;
+        Toast({ message: action.payload.message, type: "success" });
+      })
+      .addCase(uploadFileAsync.pending, (state) => {
+        state.status = STATUS.PENDING;
+      })
+      .addCase(uploadFileAsync.rejected, (state) => {
+        state.status = STATUS.REJECTED;
+      })
+      .addCase(uploadFileAsync.fulfilled, (state, action) => {
+        state.status = STATUS.FULFILLED;
+        state.uploadFileState = false;
         Toast({ message: action.payload.message, type: "success" });
       });
   },

@@ -54,7 +54,7 @@ export default function FolderList() {
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
   const dispatch = useAppDispatch();
-  const { filterState, uploadFileState } = useAppSelector(
+  const { createFolderState, uploadFileState } = useAppSelector(
     (state: AppState) => state.folders
   );
   const { CreateFolderModalOpen, UploadFileOpen } = FolderAndFileAction;
@@ -172,7 +172,7 @@ export default function FolderList() {
       </div>
       {/* Create folder */}
       <Dialog
-        isOpen={filterState}
+        isOpen={createFolderState}
         onClose={() => dispatch(CreateFolderModalOpen(false))}
         children={<CreateFolder />}
         title="Create Folder"
